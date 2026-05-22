@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <title>Die Bucheule — Bald geöffnet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Die Bucheule — unsere Website ist gerade in Arbeit. Bald sind wir online. Bei Fragen: kontakt@die-bucheule.de" />
+  <meta name="theme-color" content="#faf6ee" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#161616" media="(prefers-color-scheme: dark)" />
+  <style>
+    /* ====== Tokens ====== */
+    html[data-theme="light"] {
+      --bg: #faf6ee;
+      --bg-soft: #f5efe1;
+      --fg: #1a1a1a;
+      --soft: #7a7368;
+      --soft-2: rgba(26,26,26,0.10);
+      --accent: #c9941f;
+      --accent-strong: #f0c040;
+      --paper-stroke: rgba(26,26,26,0.12);
+      --paper-fill: #ffffff;
+      --paper-line: rgba(26,26,26,0.18);
+      --rule: rgba(26,26,26,0.10);
+      --shadow: rgba(26,26,26,0.10);
+      color-scheme: light;
+    }
+    html[data-theme="dark"] {
+      --bg: #161616;
+      --bg-soft: #1f1f1f;
+      --fg: #faf6ee;
+      --soft: rgba(250,246,238,0.55);
+      --soft-2: rgba(250,246,238,0.10);
+      --accent: #f0c040;
+      --accent-strong: #f0c040;
+      --paper-stroke: rgba(250,246,238,0.16);
+      --paper-fill: #232323;
+      --paper-line: rgba(250,246,238,0.22);
+      --rule: rgba(250,246,238,0.12);
+      --shadow: rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      transition: background .3s ease, color .3s ease;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 40px 32px;
+      position: relative;
+    }
+
+    /* ====== Top bar ====== */
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+    }
+    .brand .dot {
+      width: 8px; height: 8px;
+      background: var(--accent-strong);
+      border-radius: 50%;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.55; }
+      50%      { transform: scale(1.55); opacity: 1; }
+    }
+
+    .toggle {
+      position: relative;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid var(--rule);
+      cursor: pointer;
+      color: var(--fg);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+    .toggle:hover { background: var(--bg-soft); border-color: var(--paper-stroke); }
+    .toggle:active { transform: scale(0.95); }
+    .toggle svg { position: absolute; width: 18px; height: 18px; transition: opacity .25s, transform .35s ease; }
+    html[data-theme="light"] .toggle .moon { opacity: 1; transform: rotate(0deg); }
+    html[data-theme="light"] .toggle .sun  { opacity: 0; transform: rotate(40deg); }
+    html[data-theme="dark"]  .toggle .moon { opacity: 0; transform: rotate(-40deg); }
+    html[data-theme="dark"]  .toggle .sun  { opacity: 1; transform: rotate(0deg); }
+
+    /* ====== Main ====== */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 56px;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    /* ====== Stage with owl + receipts ====== */
+    .stage {
+      position: relative;
+      width: 380px;
+      height: 360px;
+      flex: 0 0 auto;
+    }
+
+    /* Soft golden aureole behind everything */
+    .glow {
+      position: absolute;
+      inset: -30px;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 50% 50%,
+          rgba(240,192,64,0.42) 0%,
+          rgba(240,192,64,0.22) 22%,
+          rgba(240,192,64,0.08) 48%,
+          rgba(240,192,64,0.00) 72%);
+      animation: glowPulse 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+    html[data-theme="dark"] .glow {
+      background:
+        radial-gradient(circle at 50% 50%,
+          rgba(240,192,64,0.32) 0%,
+          rgba(240,192,64,0.16) 24%,
+          rgba(240,192,64,0.06) 50%,
+          rgba(240,192,64,0.00) 74%);
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.95; transform: scale(1); }
+      50%      { opacity: 1;    transform: scale(1.05); }
+    }
+
+    /* Scattered triangles (beak vocabulary) */
+    .bg-tri {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+    @keyframes triSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .ring {
+      position: absolute;
+      inset: 36px;
+      border-radius: 50%;
+      border: 1.5px dashed var(--accent-strong);
+      opacity: 0.30;
+      animation: spin 28s linear infinite;
+      z-index: 1;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .owl-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bob 5s ease-in-out infinite;
+      z-index: 3;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%      { transform: translateY(-10px) rotate(-1.2deg); }
+    }
+    .owl-wrap > svg { width: 200px; height: 200px; display: block; }
+
+    .pupil { transform-origin: center; transform-box: fill-box; }
+    .pupil-l { animation: blink 5.6s ease-in-out infinite; }
+    .pupil-r { animation: blink 5.6s ease-in-out infinite; }
+    @keyframes blink {
+      0%, 86%, 100% { transform: scaleY(1); }
+      89%, 91%      { transform: scaleY(0.05); }
+    }
+
+    /* Scan line — a thin gold sweep across the owl */
+    .scan {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 180px;
+      height: 2px;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(90deg, transparent, var(--accent-strong) 50%, transparent);
+      opacity: 0;
+      animation: scan 6s ease-in-out infinite;
+      animation-delay: 2s;
+      z-index: 4;
+      pointer-events: none;
+      filter: blur(0.5px);
+    }
+    @keyframes scan {
+      0%, 100% { opacity: 0; transform: translate(-50%, -80px); }
+      30%      { opacity: 0; transform: translate(-50%, -80px); }
+      45%      { opacity: 0.65; transform: translate(-50%, -40px); }
+      65%      { opacity: 0.65; transform: translate(-50%, 40px); }
+      80%      { opacity: 0; transform: translate(-50%, 80px); }
+    }
+
+    /* Receipts */
+    .receipt {
+      position: absolute;
+      filter: drop-shadow(0 6px 14px var(--shadow));
+      z-index: 2;
+    }
+    .receipt.r1 { top: 4%;  left: 2%;   width: 50px;  height: 68px;
+                  animation: float1 9s ease-in-out infinite; }
+    .receipt.r2 { top: 10%; right: 4%;  width: 44px;  height: 60px;
+                  animation: float2 10.5s ease-in-out infinite; }
+    .receipt.r3 { bottom: 8%; left: 6%; width: 56px;  height: 76px;
+                  animation: float3 11s ease-in-out infinite; }
+    .receipt.r4 { bottom: 4%; right: 6%; width: 48px; height: 64px;
+                  animation: float4 8.5s ease-in-out infinite; }
+    .receipt.r5 { top: 38%; left: -2%;  width: 36px;  height: 50px;
+                  animation: float5 12s ease-in-out infinite;
+                  opacity: 0.85; }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0)    rotate(-9deg); }
+      50%      { transform: translate(8px, -12px) rotate(-2deg); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0)    rotate(12deg); }
+      50%      { transform: translate(-10px, 10px) rotate(4deg); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0)    rotate(-15deg); }
+      50%      { transform: translate(12px, -8px)  rotate(-6deg); }
+    }
+    @keyframes float4 {
+      0%, 100% { transform: translate(0, 0)    rotate(7deg); }
+      50%      { transform: translate(-6px, -14px) rotate(15deg); }
+    }
+    @keyframes float5 {
+      0%, 100% { transform: translate(0, 0)    rotate(-20deg); }
+      50%      { transform: translate(6px, 8px) rotate(-10deg); }
+    }
+
+    /* loading bar at bottom of stage */
+    .progress {
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 2px;
+      background: var(--soft-2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 40%;
+      background: var(--accent-strong);
+      border-radius: 999px;
+      animation: progress 3.5s ease-in-out infinite;
+    }
+    @keyframes progress {
+      0%   { transform: translateX(-110%); width: 30%; }
+      50%  { width: 60%; }
+      100% { transform: translateX(280%); width: 30%; }
+    }
+
+    /* ====== Copy ====== */
+    .copy {
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+    }
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--soft);
+      display: inline-flex; gap: 10px; align-items: center;
+    }
+    .kicker .bar { display: inline-block; width: 22px; height: 1px; background: var(--soft); }
+
+    .h1 {
+      font-size: clamp(36px, 5.6vw, 60px);
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      font-weight: 800;
+      margin: 0;
+      text-wrap: balance;
+    }
+    .h1 .accent { color: var(--accent); font-style: italic; }
+    .lede {
+      font-size: 16.5px;
+      color: var(--soft);
+      margin: 0;
+      max-width: 480px;
+      line-height: 1.55;
+      text-wrap: pretty;
+    }
+
+    .actions { display: inline-flex; gap: 12px; align-items: center; margin-top: 8px; flex-wrap: wrap; justify-content: center; }
+    .contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 22px 13px 18px;
+      border: 1px solid var(--fg);
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 700;
+      font-size: 14px;
+      transition: background .2s, color .2s, transform .15s;
+      background: transparent;
+    }
+    .contact:hover {
+      background: var(--accent-strong);
+      color: #1a1a1a;
+      border-color: var(--accent-strong);
+      transform: translateY(-1px);
+    }
+    .contact svg { width: 16px; height: 16px; }
+
+    .copy-link {
+      margin-top: -4px;
+      background: transparent;
+      border: 0;
+      padding: 4px 8px;
+      font: inherit;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: var(--soft);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: underline;
+      text-decoration-color: var(--soft-2);
+      text-underline-offset: 3px;
+      transition: color .2s;
+    }
+    .copy-link:hover { color: var(--fg); text-decoration-color: var(--fg); }
+    .copy-link .check { width: 12px; height: 12px; display: none; color: var(--accent); }
+    .copy-link.copied { color: var(--accent); text-decoration-color: var(--accent); }
+    .copy-link.copied .check { display: inline-block; }
+
+    /* Copy toast */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 32px;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--fg);
+      color: var(--bg);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+      z-index: 10;
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ====== Footer ====== */
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--soft);
+      letter-spacing: 0.08em;
+      padding-top: 28px;
+      border-top: 1px solid var(--rule);
+    }
+    .bottom .right {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing: 0;
+    }
+    .bottom .left { display: inline-flex; align-items: center; gap: 14px; }
+    .bottom .left .sep { color: var(--soft-2); }
+
+    /* ====== Reduced motion ====== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    /* ====== Responsive ====== */
+    @media (max-width: 640px) {
+      .page { padding: 20px 20px 24px; }
+      .main { gap: 36px; padding: 24px 0; }
+      .stage { width: 300px; height: 300px; }
+      .owl-wrap > svg { width: 160px; height: 160px; }
+      .receipt.r5 { display: none; }
+      .lede { font-size: 15px; }
+      .bottom { font-size: 10.5px; flex-direction: column; gap: 8px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Top ===== -->
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        DIE BUCHEULE
+      </div>
+      <button class="toggle" id="themeToggle" aria-label="Hell-/Dunkelmodus wechseln" title="Hell-/Dunkelmodus wechseln">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <line x1="12" y1="2.2" x2="12" y2="4.5"/>
+          <line x1="12" y1="19.5" x2="12" y2="21.8"/>
+          <line x1="2.2" y1="12" x2="4.5" y2="12"/>
+          <line x1="19.5" y1="12" x2="21.8" y2="12"/>
+          <line x1="4.9" y1="4.9" x2="6.6" y2="6.6"/>
+          <line x1="17.4" y1="17.4" x2="19.1" y2="19.1"/>
+          <line x1="4.9" y1="19.1" x2="6.6" y2="17.4"/>
+          <line x1="17.4" y1="6.6" x2="19.1" y2="4.9"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- ===== Main ===== -->
+    <main class="main">
+      <div class="stage" aria-hidden="true">
+        <!-- soft golden aureole -->
+        <div class="glow"></div>
+
+        <div class="ring"></div>
+
+        <!-- floating receipts -->
+        <svg class="receipt r1" viewBox="0 0 40 56" preserveAspectRatio="none">
+          <rect x="0.5" y="0.5" width="39" height="55" rx="2" fill="var(--paper-fill)" stroke="var(--paper-stroke)"/>
+          <rect x="6" y="6"  width="28" height="3"   fill="var(--accent-strong)"/>
+          <rect x="6" y="14" width="20" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="20" width="24" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="26" width="14" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="40" width="10" height="2.5" fill="var(--paper-line)"/>
+          <rect x="22" y="40" width="12" height="2.5" fill="var(--paper-line)"/>
+        </svg>
+
+        <svg class="receipt r2" viewBox="0 0 40 56" preserveAspectRatio="none">
+          <rect x="0.5" y="0.5" width="39" height="55" rx="2" fill="var(--paper-fill)" stroke="var(--paper-stroke)"/>
+          <rect x="6" y="6"  width="20" height="3"   fill="var(--paper-line)"/>
+          <rect x="6" y="14" width="28" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="20" width="18" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="26" width="22" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="42" width="22" height="3"   fill="var(--accent-strong)"/>
+        </svg>
+
+        <svg class="receipt r3" viewBox="0 0 40 56" preserveAspectRatio="none">
+          <rect x="0.5" y="0.5" width="39" height="55" rx="2" fill="var(--paper-fill)" stroke="var(--paper-stroke)"/>
+          <rect x="6" y="6"  width="24" height="3"   fill="var(--accent-strong)"/>
+          <rect x="6" y="14" width="22" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="20" width="16" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="26" width="26" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="32" width="18" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="44" width="14" height="2.5" fill="var(--paper-line)"/>
+          <rect x="26" y="44" width="8" height="2.5" fill="var(--paper-line)"/>
+        </svg>
+
+        <svg class="receipt r4" viewBox="0 0 40 56" preserveAspectRatio="none">
+          <rect x="0.5" y="0.5" width="39" height="55" rx="2" fill="var(--paper-fill)" stroke="var(--paper-stroke)"/>
+          <rect x="6" y="8"  width="14" height="2.5" fill="var(--paper-line)"/>
+          <rect x="22" y="8" width="12" height="2.5" fill="var(--paper-line)"/>
+          <rect x="6" y="18" width="28" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="24" width="22" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="30" width="26" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="42" width="28" height="3"   fill="var(--accent-strong)"/>
+        </svg>
+
+        <svg class="receipt r5" viewBox="0 0 40 56" preserveAspectRatio="none">
+          <rect x="0.5" y="0.5" width="39" height="55" rx="2" fill="var(--paper-fill)" stroke="var(--paper-stroke)"/>
+          <rect x="6" y="6"  width="20" height="3"   fill="var(--paper-line)"/>
+          <rect x="6" y="14" width="24" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="20" width="14" height="1.5" fill="var(--paper-line)"/>
+          <rect x="6" y="44" width="22" height="2.5" fill="var(--accent-strong)"/>
+        </svg>
+
+        <!-- Owl mascot -->
+        <div class="owl-wrap">
+          <svg viewBox="0 0 160 160" fill="none">
+            <!-- body / B-shape -->
+            <path d="M 30 22 L 30 138 L 84 138 C 122 138, 138 116, 138 96 C 138 82, 128 72, 116 70 C 130 67, 138 56, 138 44 C 138 32, 122 22, 90 22 Z" fill="var(--fg)"/>
+            <!-- ear tufts -->
+            <path d="M 44 30 L 52 12 L 60 28 Z" fill="var(--fg)"/>
+            <path d="M 86 28 L 96 12 L 104 30 Z" fill="var(--fg)"/>
+            <!-- eyes white -->
+            <circle cx="64" cy="58" r="20" fill="var(--bg)"/>
+            <circle cx="102" cy="58" r="20" fill="var(--bg)"/>
+            <!-- pupils -->
+            <circle class="pupil pupil-l" cx="64"  cy="58" r="11" fill="var(--fg)"/>
+            <circle class="pupil pupil-r" cx="102" cy="58" r="11" fill="var(--fg)"/>
+            <!-- highlights -->
+            <circle cx="60" cy="54" r="3.8" fill="var(--bg)"/>
+            <circle cx="98" cy="54" r="3.8" fill="var(--bg)"/>
+            <!-- beak -->
+            <path d="M 74 82 L 92 82 L 83 96 Z" fill="var(--accent-strong)"/>
+          </svg>
+        </div>
+
+        <!-- subtle scan line -->
+        <div class="scan"></div>
+
+        <!-- loading bar -->
+        <div class="progress" aria-hidden="true"></div>
+      </div>
+
+      <div class="copy">
+        <div class="kicker"><span class="bar"></span>Wartung läuft<span class="bar"></span></div>
+        <h1 class="h1">Bald geöffnet —<br/>die Eule sortiert noch <span class="accent">Belege.</span></h1>
+        <p class="lede">Wir feilen an unserer Website. Solange erreichst du uns jederzeit per Mail — wir antworten klug, genau, prompt.</p>
+        <div class="actions">
+          <a class="contact" href="/cdn-cgi/l/email-protection#d5bebabba1b4bea195b1bcb0f8b7a0b6bdb0a0b9b0fbb1b0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span class="__cf_email__" data-cfemail="cca7a3a2b8ada7b88ca8a5a9e1aeb9afa4a9b9a0a9e2a8a9">[email&#160;protected]</span>
+          </a>
+        </div>
+        <button type="button" class="copy-link" id="copyMail">
+          <span class="copy-label">E-Mail-Adresse kopieren</span>
+          <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4,12 10,18 20,6"/>
+          </svg>
+        </button>
+        <div class="toast" id="toast" role="status" aria-live="polite">E-Mail-Adresse kopiert</div>
+      </div>
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="bottom">
+      <div class="left">
+        <span>© 2026 Die Bucheule GbR</span>
+      </div>
+      <span class="right" id="status">coming-soon · v0.1</span>
+    </footer>
+
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const KEY = 'bucheule-theme';
+
+      // Init: stored preference > system preference > light
+      const stored = localStorage.getItem(KEY);
+      const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initial = stored || (sysDark ? 'dark' : 'light');
+      root.setAttribute('data-theme', initial);
+
+      btn.addEventListener('click', () => {
+        const cur  = root.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem(KEY, next);
+      });
+
+      // Follow system changes when user hasn't picked manually
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem(KEY)) {
+          root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+    })();
+
+    // ===== Copy email to clipboard =====
+    (function () {
+      const btn = document.getElementById('copyMail');
+      const toast = document.getElementById('toast');
+      const label = btn.querySelector('.copy-label');
+      const EMAIL = 'kontakt@die-bucheule.de';
+      const ORIGINAL = label.textContent;
+      let resetTimer = null;
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-1000px';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(EMAIL);
+          } else {
+            fallbackCopy(EMAIL);
+          }
+        } catch (err) {
+          fallbackCopy(EMAIL);
+        }
+
+        btn.classList.add('copied');
+        label.textContent = 'Kopiert!';
+        toast.classList.add('show');
+
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => {
+          btn.classList.remove('copied');
+          label.textContent = ORIGINAL;
+          toast.classList.remove('show');
+        }, 1800);
+      });
+    })();
+
+  </script>
+</body>
+</html>
